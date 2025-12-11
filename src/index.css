@@ -1,0 +1,12 @@
+@import url("./vendor/normalize.css");
+
+body {
+  margin: 0;
+  font-family: "Cabinet Grotesk", Arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+* {
+  box-sizing: border-box;
+}

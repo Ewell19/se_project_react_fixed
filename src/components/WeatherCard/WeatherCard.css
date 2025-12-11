@@ -1,0 +1,84 @@
+.weather-card {
+  position: relative;
+  min-height: 80px;
+  background-color: #f3f3f3;
+  border-radius: 12px;
+  padding: 16px 20px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  transition: background 0.3s ease;
+}
+
+.weather-card__temp {
+  margin: 0 0 8px;
+  font-family: "Cabinet Grotesk", Arial, sans-serif;
+  font-weight: 700;
+  font-size: 36px;
+  line-height: 40px;
+  color: #000;
+}
+
+.weather-card__condition {
+  margin: 0;
+  font-family: "Cabinet Grotesk", Arial, sans-serif;
+  font-size: 16px;
+  line-height: 20px;
+  color: rgba(0, 0, 0, 0.6);
+}
+
+/* Day time weather conditions */
+.weather-card_type_sunny_day {
+  background: linear-gradient(135deg, #ffd89b 0%, #19547b 100%);
+}
+
+.weather-card_type_sunny_day .weather-card__temp,
+.weather-card_type_sunny_day .weather-card__condition {
+  color: #fff;
+}
+
+.weather-card_type_cloudy_day {
+  background: linear-gradient(135deg, #bdc3c7 0%, #2c3e50 100%);
+}
+
+.weather-card_type_cloudy_day .weather-card__temp,
+.weather-card_type_cloudy_day .weather-card__condition {
+  color: #fff;
+}
+
+.weather-card_type_snowy_day {
+  background: linear-gradient(135deg, #e6f3ff 0%, #667eea 100%);
+}
+
+.weather-card_type_snowy_day .weather-card__temp,
+.weather-card_type_snowy_day .weather-card__condition {
+  color: #fff;
+}
+
+/* Night time weather conditions */
+.weather-card_type_sunny_night {
+  background: linear-gradient(135deg, #2c3e50 0%, #fd746c 100%);
+}
+
+.weather-card_type_sunny_night .weather-card__temp,
+.weather-card_type_sunny_night .weather-card__condition {
+  color: #fff;
+}
+
+.weather-card_type_cloudy_night {
+  background: linear-gradient(135deg, #232526 0%, #414345 100%);
+}
+
+.weather-card_type_cloudy_night .weather-card__temp,
+.weather-card_type_cloudy_night .weather-card__condition {
+  color: #fff;
+}
+
+.weather-card_type_snowy_night {
+  background: linear-gradient(135deg, #2c3e50 0%, #3498db 100%);
+}
+
+.weather-card_type_snowy_night .weather-card__temp,
+.weather-card_type_snowy_night .weather-card__condition {
+  color: #fff;
+}

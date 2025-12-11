@@ -1,0 +1,24 @@
+.main {
+  padding: 0 40px;
+}
+
+.cards {
+  margin-top: 40px;
+}
+
+.cards__text {
+  font-family: "Cabinet Grotesk", Arial, sans-serif;
+  font-weight: 700;
+  font-size: 20px;
+  line-height: 25px;
+  margin: 0 0 34px;
+}
+
+.cards__list {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(328px, 1fr));
+  gap: 17px;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}

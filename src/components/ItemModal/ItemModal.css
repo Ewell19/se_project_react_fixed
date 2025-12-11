@@ -1,0 +1,38 @@
+.modal__content_type_image {
+  position: relative;
+  background-color: transparent;
+  padding: 0;
+  max-width: 498px;
+}
+
+.modal__image {
+  width: 100%;
+  border-radius: 20px;
+  display: block;
+}
+
+.modal__footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px 32px;
+  background-color: #fff;
+  border-radius: 0 0 20px 20px;
+}
+
+.modal__caption {
+  margin: 0;
+  font-family: "Cabinet Grotesk", Arial, sans-serif;
+  font-weight: 700;
+  font-size: 20px;
+  line-height: 24px;
+  color: #000;
+}
+
+.modal__weather {
+  margin: 0;
+  font-family: "Cabinet Grotesk", Arial, sans-serif;
+  font-size: 20px;
+  line-height: 24px;
+  color: rgba(0, 0, 0, 0.6);
+}
