@@ -28,6 +28,16 @@ function App() {
     setSelectedCard(card);
   };
 
+  const handleAddItem = (formData) => {
+    const newItem = {
+      _id: clothingItems.length + 1,
+      name: formData.name,
+      link: formData.link,
+      weather: formData.weather,
+    };
+    setClothingItems([...clothingItems, newItem]);
+  };
+
   useEffect(() => {
     getWeather()
       .then((data) => {
@@ -61,9 +71,8 @@ function App() {
         name="add-garment"
         isOpen={activeModal === "add-garment"}
         onClose={handleCloseModal}
-      >
-        {/* Form inputs will go here in future sprints */}
-      </ModalWithForm>
+        onSubmit={handleAddItem}
+      ></ModalWithForm>
       <ItemModal
         isOpen={activeModal === "preview"}
         onClose={handleCloseModal}
