@@ -1,0 +1,95 @@
+.profile {
+  display: grid;
+  grid-template-columns: 240px 1fr;
+  gap: 48px;
+  padding: 0 40px 40px;
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+.profile__sidebar {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 12px;
+  padding-top: 20px;
+}
+
+.profile__user {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+
+.profile__avatar {
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  object-fit: cover;
+  background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%);
+}
+
+.profile__avatar-placeholder {
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%);
+  color: #fff;
+  font-family: "Cabinet Grotesk", Arial, sans-serif;
+  font-size: 24px;
+  font-weight: 700;
+}
+
+.profile__name {
+  margin: 0;
+  font-family: "Cabinet Grotesk", Arial, sans-serif;
+  font-size: 20px;
+  font-weight: 600;
+  line-height: 24px;
+  text-align: left;
+}
+
+.profile__button {
+  width: auto;
+  padding: 0;
+  border: none;
+  background: transparent;
+  font-family: "Cabinet Grotesk", Arial, sans-serif;
+  font-size: 20px;
+  font-weight: 500;
+  cursor: pointer;
+  line-height: 24px;
+  text-align: left;
+}
+
+.profile__button:hover {
+  opacity: 0.7;
+}
+
+.profile__button:active {
+  opacity: 0.5;
+}
+
+@media (max-width: 900px) {
+  .profile {
+    grid-template-columns: 1fr;
+    gap: 24px;
+  }
+
+  .profile__sidebar {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+    padding-top: 0;
+  }
+
+  .profile__name,
+  .profile__button {
+    font-size: 18px;
+    line-height: 22px;
+  }
+}

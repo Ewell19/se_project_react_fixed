@@ -1,33 +1,48 @@
 .modal__content_type_image {
   position: relative;
-  background-color: transparent;
+  background-color: #fff;
+  border-radius: 20px;
   padding: 0;
-  max-width: 498px;
+  max-width: 760px;
+  width: 100%;
+  overflow: hidden;
 }
 
-/* Use a white close icon for the image modal variant */
 .modal__content_type_image .modal__close {
   background: transparent
-    url("data:image/svg+xml,%3Csvg width='20' height='20' viewBox='0 0 20 20' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1 1L19 19M19 1L1 19' stroke='%23FFF' stroke-opacity='0.9'/%3E%3C/svg%3E")
+    url("data:image/svg+xml,%3Csvg width='20' height='20' viewBox='0 0 20 20' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1 1L19 19M19 1L1 19' stroke='%23000' stroke-opacity='0.3'/%3E%3C/svg%3E")
     center no-repeat;
+  top: 20px;
+  right: 20px;
+  z-index: 3;
+}
+
+.modal__body-image {
+  display: grid;
+  grid-template-columns: minmax(280px, 1fr) 260px;
+  min-height: 420px;
+}
+
+.modal__image-wrapper {
+  position: relative;
 }
 
 .modal__image {
   width: 100%;
-  border-radius: 20px 20px 0 0;
+  height: 100%;
+  object-fit: cover;
   display: block;
 }
 
-.modal__footer {
-  display: flex;
-  flex-direction: column;
-  padding: 20px 32px;
-  background-color: #fff;
-  border-radius: 0 0 20px 20px;
-}
-
 .modal__caption {
+  position: absolute;
+  top: 12px;
+  left: 50%;
+  transform: translateX(-50%);
   margin: 0;
+  padding: 3px 12px;
+  border-radius: 6px;
+  background-color: #fff;
   font-family: "Cabinet Grotesk", Arial, sans-serif;
   font-weight: 700;
   font-size: 20px;
@@ -35,10 +50,57 @@
   color: #000;
 }
 
+.modal__details {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 28px 28px 24px;
+}
+
 .modal__weather {
   margin: 0;
   font-family: "Cabinet Grotesk", Arial, sans-serif;
-  font-size: 20px;
-  line-height: 24px;
-  color: rgba(0, 0, 0, 0.6);
+  font-weight: 700;
+  font-size: 32px;
+  line-height: 36px;
+  color: #000;
+}
+
+.modal__delete-button {
+  margin-top: auto;
+  border: none;
+  background: transparent;
+  color: #ff4d00;
+  font-family: "Cabinet Grotesk", Arial, sans-serif;
+  font-size: 32px;
+  line-height: 36px;
+  font-weight: 700;
+  padding: 0;
+  align-self: flex-start;
+  cursor: pointer;
+}
+
+.modal__delete-button:hover {
+  opacity: 0.75;
+}
+
+@media (max-width: 760px) {
+  .modal__content_type_image {
+    max-width: 92vw;
+  }
+
+  .modal__body-image {
+    grid-template-columns: 1fr;
+  }
+
+  .modal__details {
+    min-height: 180px;
+    padding: 18px 20px 20px;
+  }
+
+  .modal__weather,
+  .modal__delete-button {
+    font-size: 24px;
+    line-height: 28px;
+  }
 }

@@ -1,6 +1,14 @@
 import "./WeatherCard.css";
 
-function WeatherCard({ weatherData }) {
+function WeatherCard({ weatherData, currentTemperatureUnit }) {
+  const temperatureInFahrenheit = weatherData?.temperature;
+  const displayedTemperature =
+    typeof temperatureInFahrenheit === "number"
+      ? currentTemperatureUnit === "F"
+        ? temperatureInFahrenheit
+        : Math.round(((temperatureInFahrenheit - 32) * 5) / 9)
+      : "--";
+
   const getWeatherClassName = () => {
     if (!weatherData) return "";
 
@@ -19,7 +27,9 @@ function WeatherCard({ weatherData }) {
 
   return (
     <section className={`weather-card ${getWeatherClassName()}`}>
-      <p className="weather-card__temp">{weatherData?.temperature}°F</p>
+      <p className="weather-card__temp">
+        {displayedTemperature}°{currentTemperatureUnit}
+      </p>
       <p className="weather-card__condition">
         {weatherData?.weather &&
           weatherData.weather.charAt(0).toUpperCase() +

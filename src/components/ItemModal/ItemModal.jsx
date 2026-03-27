@@ -1,7 +1,10 @@
-import { useEffect } from "react";
+import { useContext, useEffect } from "react";
 import "./ItemModal.css";
+import CurrentUserContext from "../../contexts/CurrentUserContext";
 
-function ItemModal({ isOpen, onClose, card }) {
+function ItemModal({ isOpen, onClose, card, onDeleteItem }) {
+  const currentUser = useContext(CurrentUserContext);
+
   useEffect(() => {
     if (!isOpen) return;
 
@@ -23,6 +26,10 @@ function ItemModal({ isOpen, onClose, card }) {
 
   if (!card) return null;
 
+  const owner = typeof card.owner === "object" ? card.owner?._id : card.owner;
+  const isOwn = owner === currentUser?._id;
+  const imageSrc = card.link || card.imageUrl;
+
   return (
     <div
       className={`modal ${isOpen ? "modal_opened" : ""}`}
@@ -34,10 +41,23 @@ function ItemModal({ isOpen, onClose, card }) {
           type="button"
           onClick={onClose}
         ></button>
-        <img src={card.link} alt={card.name} className="modal__image" />
-        <div className="modal__footer">
-          <h2 className="modal__caption">{card.name}</h2>
-          <p className="modal__weather">Weather: {card.weather}</p>
+        <div className="modal__body-image">
+          <div className="modal__image-wrapper">
+            <img src={imageSrc} alt={card.name} className="modal__image" />
+            <h2 className="modal__caption">{card.name}</h2>
+          </div>
+          <div className="modal__details">
+            <p className="modal__weather">Weather: {card.weather}</p>
+            {isOwn && (
+              <button
+                type="button"
+                className="modal__delete-button"
+                onClick={() => onDeleteItem(card._id)}
+              >
+                Delete item
+              </button>
+            )}
+          </div>
         </div>
       </div>
     </div>
