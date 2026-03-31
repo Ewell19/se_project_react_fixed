@@ -22,13 +22,13 @@ function App() {
   const navigate = useNavigate();
   const [weatherData, setWeatherData] = useState(null);
   const [currentTemperatureUnit, setCurrentTemperatureUnit] = useState("F");
-  const [clothingItems, setClothingItems] = useState(defaultClothingItems);
+  const [clothingItems, setClothingItems] = useState([]);
   const [activeModal, setActiveModal] = useState("");
   const [selectedCard, setSelectedCard] = useState(null);
   const [currentUser, setCurrentUser] = useState({});
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [modalError, setModalError] = useState("");
-  const [isUsingStarterItems] = useState(true);
+  const [isUsingStarterItems, setIsUsingStarterItems] = useState(false);
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
   const [itemIdToDelete, setItemIdToDelete] = useState(null);
   const [isDeleting, setIsDeleting] = useState(false);
@@ -253,12 +253,25 @@ function App() {
       })
       .catch((err) => {
         console.error("Error fetching weather:", err);
-        // Set default weather data if API fails
         setWeatherData({
           temperature: 75,
           weather: "warm",
           city: "Location",
         });
+      });
+  }, []);
+
+  useEffect(() => {
+    api
+      .getItems()
+      .then((items) => {
+        setClothingItems(items);
+        setIsUsingStarterItems(false);
+      })
+      .catch((err) => {
+        console.error("Error fetching clothing items:", err);
+        setClothingItems(defaultClothingItems);
+        setIsUsingStarterItems(true);
       });
   }, []);
 

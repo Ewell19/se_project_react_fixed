@@ -6,7 +6,7 @@
 
 Frontend API requests in this project target the WTWR backend:
 
-- Backend repo: `https://github.com/Ewell19/se_project_backend`
+- Backend repo: `https://github.com/Ewell19/express_project`
 
 ## About the Project
 

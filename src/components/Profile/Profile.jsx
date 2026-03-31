@@ -18,7 +18,6 @@ function Profile({
     const owner = typeof item.owner === "object" ? item.owner?._id : item.owner;
     return owner === currentUser?._id;
   });
-  const displayedItems = items;
 
   const firstLetter = currentUser?.name?.charAt(0)?.toUpperCase() || "U";
 
@@ -46,12 +45,12 @@ function Profile({
           Change profile data
         </button>
         <button className="profile__button" type="button" onClick={onSignOut}>
-          Log out
+          Sign out
         </button>
       </section>
 
       <ClothesSection
-        items={displayedItems}
+        items={profileItems}
         onCardClick={onCardClick}
         onCardLike={onCardLike}
         onShowDeleteConfirm={onShowDeleteConfirm}

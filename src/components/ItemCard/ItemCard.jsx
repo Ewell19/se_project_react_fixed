@@ -81,13 +81,15 @@ function ItemCard({
               aria-label="delete"
             />
           )}
-          <button
-            type="button"
-            className={itemLikeButtonClassName}
-            onClick={handleLike}
-            aria-label="like"
-            aria-pressed={shouldShowActiveLike}
-          />
+          {isLoggedIn && (
+            <button
+              type="button"
+              className={itemLikeButtonClassName}
+              onClick={handleLike}
+              aria-label="like"
+              aria-pressed={shouldShowActiveLike}
+            />
+          )}
         </div>
       </div>
       {imageError ? (
