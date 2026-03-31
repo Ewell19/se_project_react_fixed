@@ -2,7 +2,7 @@ import { useContext, useEffect } from "react";
 import "./ItemModal.css";
 import CurrentUserContext from "../../contexts/CurrentUserContext";
 
-function ItemModal({ isOpen, onClose, card, onDeleteItem }) {
+function ItemModal({ isOpen, onClose, card, onShowDeleteConfirm }) {
   const currentUser = useContext(CurrentUserContext);
 
   useEffect(() => {
@@ -29,6 +29,8 @@ function ItemModal({ isOpen, onClose, card, onDeleteItem }) {
   const owner = typeof card.owner === "object" ? card.owner?._id : card.owner;
   const isOwn = owner === currentUser?._id;
   const imageSrc = card.link || card.imageUrl;
+  const isStarterImage =
+    typeof imageSrc === "string" && imageSrc.includes("practicum-content.s3");
 
   return (
     <div
@@ -37,27 +39,33 @@ function ItemModal({ isOpen, onClose, card, onDeleteItem }) {
     >
       <div className="modal__content modal__content_type_image">
         <button
-          className="modal__close"
+          className="modal__close modal__close_type_preview"
           type="button"
           onClick={onClose}
         ></button>
-        <div className="modal__body-image">
-          <div className="modal__image-wrapper">
-            <img src={imageSrc} alt={card.name} className="modal__image" />
+        <div className="modal__image-wrapper">
+          <img
+            src={imageSrc}
+            alt={card.name}
+            className={`modal__image ${
+              isStarterImage ? "modal__image_type_starter" : ""
+            }`}
+          />
+        </div>
+        <div className="modal__details">
+          <div className="modal__text">
             <h2 className="modal__caption">{card.name}</h2>
-          </div>
-          <div className="modal__details">
             <p className="modal__weather">Weather: {card.weather}</p>
-            {isOwn && (
-              <button
-                type="button"
-                className="modal__delete-button"
-                onClick={() => onDeleteItem(card._id)}
-              >
-                Delete item
-              </button>
-            )}
           </div>
+          {isOwn && (
+            <button
+              type="button"
+              className="modal__delete-button"
+              onClick={() => onShowDeleteConfirm(card._id)}
+            >
+              Delete item
+            </button>
+          )}
         </div>
       </div>
     </div>

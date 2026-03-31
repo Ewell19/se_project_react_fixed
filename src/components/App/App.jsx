@@ -108,6 +108,8 @@ function App() {
   };
 
   const handleShowDeleteConfirm = (itemId) => {
+    setActiveModal("");
+    setSelectedCard(null);
     setItemIdToDelete(itemId);
     setShowDeleteConfirm(true);
   };
@@ -367,7 +369,7 @@ function App() {
           isOpen={activeModal === "preview"}
           onClose={handleCloseModal}
           card={selectedCard}
-          onDeleteItem={handleDeleteItem}
+          onShowDeleteConfirm={handleShowDeleteConfirm}
         />
 
         <DeleteConfirmModal

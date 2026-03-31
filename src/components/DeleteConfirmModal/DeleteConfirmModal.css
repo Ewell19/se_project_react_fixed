@@ -1,141 +1,97 @@
-.modal {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  display: flex;
-  justify-content: center;
-  align-items: flex-start;
-  padding-top: 100px;
-  background-color: rgba(0, 0, 0, 0.5);
-  visibility: hidden;
-  opacity: 0;
-  pointer-events: none;
-  transition:
-    visibility 0.3s,
-    opacity 0.3s;
-  z-index: 100;
-  overflow-y: auto;
-}
-
-.modal_opened {
-  visibility: visible;
-  opacity: 1;
-  pointer-events: auto;
-}
-
-.modal__content {
-  position: relative;
-  background-color: white;
-  border-radius: 20px;
-  padding: 40px 32px;
-  max-width: 480px;
-  width: 90%;
-  transform: translateY(0);
-  transition: transform 0.25s ease;
-  box-shadow: 0 10px 50px rgba(0, 0, 0, 0.15);
-  flex-shrink: 0;
-}
-
-.modal_opened .modal__content {
-  transform: translateY(0);
-}
-
-.modal__close {
-  position: absolute;
-  top: 20px;
-  right: 24px;
-  width: 24px;
-  height: 24px;
-  background: transparent
-    url("data:image/svg+xml,%3Csvg width='24' height='24' viewBox='0 0 24 24' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M2 2L22 22M22 2L2 22' stroke='%23999' stroke-width='2' stroke-linecap='round'/%3E%3C/svg%3E")
-    center no-repeat;
-  border: none;
-  cursor: pointer;
-  padding: 0;
-  opacity: 0.6;
-  transition: opacity 0.2s ease;
-}
-
-.modal__close:hover {
-  opacity: 1;
-}
-
-.modal__close:disabled {
-  opacity: 0.5;
-  cursor: not-allowed;
-}
-
 .modal__content_type_confirm {
+  position: relative;
+  width: min(670px, calc(100vw - 40px));
+  max-width: 670px;
+  min-height: 280px;
+  padding: 60px 40px 52px;
+  border-radius: 20px;
   text-align: center;
+  box-sizing: border-box;
+}
+
+.modal__content_type_confirm .modal__close {
+  top: 20px;
+  right: 20px;
+  width: 20px;
+  height: 20px;
+  opacity: 0.4;
+}
+
+.modal__content_type_confirm .modal__close:hover:not(:disabled) {
+  opacity: 0.7;
 }
 
 .confirm-modal__title {
-  margin: 0 0 12px;
+  max-width: 420px;
+  margin: 0 auto 0;
   font-family: "Cabinet Grotesk", Arial, sans-serif;
   font-weight: 700;
-  font-size: 24px;
-  line-height: 32px;
+  font-size: 20px;
+  line-height: 24px;
   color: #000;
 }
 
 .confirm-modal__subtitle {
-  margin: 0 0 32px;
+  max-width: 420px;
+  margin: 0 auto 40px;
   font-family: "Cabinet Grotesk", Arial, sans-serif;
-  font-size: 16px;
+  font-weight: 700;
+  font-size: 20px;
   line-height: 24px;
-  color: rgba(0, 0, 0, 0.6);
+  color: #000;
 }
 
 .confirm-modal__actions {
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  align-items: center;
+  gap: 24px;
 }
 
-.confirm-modal__confirm-btn {
-  padding: 14px 16px;
+.confirm-modal__confirm-btn,
+.confirm-modal__cancel-btn {
+  padding: 0;
   background: transparent;
   border: none;
   font-family: "Cabinet Grotesk", Arial, sans-serif;
   font-weight: 700;
-  font-size: 18px;
+  font-size: 20px;
   line-height: 24px;
-  color: #ff4d00;
   cursor: pointer;
   transition: opacity 0.2s ease;
 }
 
-.confirm-modal__confirm-btn:hover:not(:disabled) {
-  opacity: 0.75;
-}
-
-.confirm-modal__confirm-btn:disabled {
-  opacity: 0.5;
-  cursor: not-allowed;
+.confirm-modal__confirm-btn {
+  color: #ff4d00;
 }
 
 .confirm-modal__cancel-btn {
-  padding: 14px 16px;
-  background: transparent;
-  border: none;
-  font-family: "Cabinet Grotesk", Arial, sans-serif;
-  font-weight: 700;
-  font-size: 18px;
-  line-height: 24px;
   color: #000;
-  cursor: pointer;
-  transition:
-    color 0.2s ease,
-    opacity 0.2s ease;
 }
 
+.confirm-modal__confirm-btn:hover:not(:disabled),
 .confirm-modal__cancel-btn:hover:not(:disabled) {
   opacity: 0.75;
 }
 
+.confirm-modal__confirm-btn:disabled,
 .confirm-modal__cancel-btn:disabled {
   opacity: 0.5;
   cursor: not-allowed;
+}
+
+@media (max-width: 560px) {
+  .modal__content_type_confirm {
+    width: calc(100vw - 20px);
+    min-height: auto;
+    padding: 56px 20px 32px;
+  }
+
+  .confirm-modal__title,
+  .confirm-modal__subtitle,
+  .confirm-modal__confirm-btn,
+  .confirm-modal__cancel-btn {
+    font-size: 18px;
+    line-height: 22px;
+  }
 }
