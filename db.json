@@ -1,0 +1,88 @@
+{
+  "items": [
+    {
+      "_id": 4,
+      "name": "Dress",
+      "weather": "hot",
+      "link": "https://practicum-content.s3.us-west-1.amazonaws.com/software-engineer/wtwr-project/Dress.png?etag=1f9cd32a311ab139cab43494883720bf"
+    },
+    {
+      "_id": 6,
+      "name": "Jacket",
+      "weather": "cold",
+      "link": "https://practicum-content.s3.us-west-1.amazonaws.com/software-engineer/wtwr-project/Jacket.png?etag=f4bb188deaa25ac84ce2338be2d404ad"
+    {
+      "name": "Dress",
+      "imageUrl": "https://www.google.com/aclk?sa=L&ai=DChsSEwj8o9nSndGRAxU6TUcBHfyHO3MYACICCAEQIRoCcXU&co=1&ase=2&gclid=CjwKCAiA9aPKBhBhEiwAyz82JwnGCO5fZoyotKZsEWyL6nR_4sKu5RShK1BlC_5iUIrNxSVEo6wdeBoCN3UQAvD_BwE&cid=CAAS0wHkaIMIgfymZ1leOfkemfRu9ttSThbllH6p8gVhUQv97kpEjtvHypAhX60bK2sU7h4KXUmWZsIdOcBv58xDn4Ej4Kbji9Pkk0v98f3DEPEQ_pE2ZoGt_ypNn_RiP5ZhNGmjOzy6s-94jUfx5AwsQLbc0xHV0u2y2R5mcCkb7aNT2WmFaf2paYE-_-jUpevcQtafVRW9CLyBH1JHUgdNrtzmwLmiOVYa0ScW1hu-w2aOCg6vfs50CSgyKWIRrpinob7do4ArznrhLufZD6T8f-pJk9hr&cce=2&category=acrcp_v1_32&sig=AOD64_20fHKqMfAxIDM7Bhhzx2N4S6kjhg&ctype=5&q=&nis=4&ved=2ahUKEwjem9XSndGRAxUmLVkFHXmmClcQ9aACKAB6BQgFEJUB&adurl=",
+      "weather": "hot",
+      "_id": 20
+    }
+    },
+    {
+      "_id": 7,
+      "name": "Jeans",
+      "weather": "warm",
+      "link": "https://practicum-content.s3.us-west-1.amazonaws.com/software-engineer/wtwr-project/Jeans.png?etag=58345e8bef1ce5f95ac882e71d309e6c"
+    },
+    {
+      "_id": 8,
+      "name": "Loafers",
+      "weather": "warm",
+      "link": "https://practicum-content.s3.us-west-1.amazonaws.com/software-engineer/wtwr-project/Loafers.png?etag=dc2d6e1ca7b297597406e35c40aef030"
+    },
+    {
+      "_id": 9,
+      "name": "Sandals",
+      "weather": "hot",
+      "link": "https://practicum-content.s3.us-west-1.amazonaws.com/software-engineer/wtwr-project/Sandals.png?etag=9bea85b0b88c2a4a765bc0154e88a797"
+    },
+    {
+      "_id": 10,
+      "name": "Scarf",
+      "weather": "cold",
+      "link": "https://practicum-content.s3.us-west-1.amazonaws.com/software-engineer/wtwr-project/Scarf.png?etag=86e5926a5d29a8b2f2c2055651b0c6ba"
+    },
+    {
+      "_id": 11,
+      "name": "Shorts",
+      "weather": "hot",
+      "link": "https://practicum-content.s3.us-west-1.amazonaws.com/software-engineer/wtwr-project/Shorts.png?etag=28cdb8e0b7ce5f75b0a0b6f5b2e5f0e5"
+    },
+    {
+      "_id": 12,
+      "name": "Skirt",
+      "weather": "warm",
+      "link": "https://practicum-content.s3.us-west-1.amazonaws.com/software-engineer/wtwr-project/Skirt.png?etag=2f7c9e3e4d5f6a7b8c9d0e1f2a3b4c5d"
+    },
+    {
+      "_id": 13,
+      "name": "Sneakers",
+      "weather": "warm",
+      "link": "https://practicum-content.s3.us-west-1.amazonaws.com/software-engineer/wtwr-project/Sneakers.png?etag=3f4e5d6c7b8a9f0e1d2c3b4a5f6e7d8c"
+    },
+    {
+      "_id": 15,
+      "name": "T-Shirt",
+      "weather": "hot",
+      "link": "https://practicum-content.s3.us-west-1.amazonaws.com/software-engineer/wtwr-project/T-Shirt.png?etag=4f5e6d7c8b9a0f1e2d3c4b5a6f7e8d9c"
+    },
+    {
+      "_id": 16,
+      "name": "Sweater",
+      "weather": "cold",
+      "link": "https://practicum-content.s3.us-west-1.amazonaws.com/software-engineer/wtwr-project/Coat.png?etag=298717ed89d5e40b1954a1831ae0bdd4"
+    },
+    {
+      "name": "boots",
+      "link": "https://assets.timberland.com/images/t_img/f_auto,h_650,e_sharpen:60,w_650/dpr_2.0/v1718951472/TB110361713-ALT4/Womens-Timberland-Premium-6Inch-Waterproof-Boot.png",
+      "weather": "cold",
+      "_id": 18
+    },
+    {
+      "name": "cap",
+      "imageUrl": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR6eApDvjJyEivlUMZ_NX9E5EcwscSwMzUZTQ&s",
+      "weather": "hot",
+      "_id": 19
+    }
+  ]
+}
