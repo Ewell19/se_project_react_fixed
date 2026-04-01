@@ -1,5 +1,5 @@
 import "./ItemCard.css";
-import { useContext, useEffect, useState } from "react";
+import { useContext, useState } from "react";
 import CurrentUserContext from "../../contexts/CurrentUserContext";
 
 function ItemCard({
@@ -11,7 +11,6 @@ function ItemCard({
 }) {
   const currentUser = useContext(CurrentUserContext);
   const [imageError, setImageError] = useState(false);
-  const [isLocalLiked, setIsLocalLiked] = useState(false);
 
   const owner = typeof item.owner === "object" ? item.owner?._id : item.owner;
   const isOwn = owner === currentUser?._id;
@@ -21,16 +20,7 @@ function ItemCard({
     return likedId === currentUser?._id;
   });
 
-  useEffect(() => {
-    if (isLoggedIn) {
-      setIsLocalLiked(Boolean(isLiked));
-      return;
-    }
-
-    setIsLocalLiked(false);
-  }, [isLoggedIn, isLiked]);
-
-  const shouldShowActiveLike = isLocalLiked;
+  const shouldShowActiveLike = Boolean(isLiked) && isLoggedIn;
 
   const itemLikeButtonClassName = `card__like-button ${
     shouldShowActiveLike ? "card__like-button_active" : ""
@@ -42,8 +32,6 @@ function ItemCard({
 
   const handleLike = (e) => {
     e.stopPropagation();
-
-    setIsLocalLiked((prev) => !prev);
 
     if (!isLoggedIn) {
       return;

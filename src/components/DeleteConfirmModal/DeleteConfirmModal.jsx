@@ -1,6 +1,12 @@
 import "./DeleteConfirmModal.css";
 
-function DeleteConfirmModal({ isOpen, onClose, onConfirm, isLoading }) {
+function DeleteConfirmModal({
+  isOpen,
+  onClose,
+  onConfirm,
+  isLoading,
+  errorMessage,
+}) {
   const handleOverlay = (e) => {
     if (e.target === e.currentTarget && !isLoading) {
       onClose();
@@ -29,6 +35,7 @@ function DeleteConfirmModal({ isOpen, onClose, onConfirm, isLoading }) {
           Are you sure you want to delete this item?
         </h2>
         <p className="confirm-modal__subtitle">This action is irreversible.</p>
+        {errorMessage && <p className="confirm-modal__error">{errorMessage}</p>}
         <div className="confirm-modal__actions">
           <button
             type="button"

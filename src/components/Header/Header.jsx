@@ -11,8 +11,6 @@ function Header({
   onRegisterClick,
   weatherData,
   isLoggedIn,
-  currentTemperatureUnit,
-  onToggleSwitchChange,
 }) {
   const currentUser = useContext(CurrentUserContext);
   const currentDate = new Date().toLocaleString("default", {
@@ -31,10 +29,7 @@ function Header({
         {currentDate}, {weatherData?.city || "Loading..."}
       </p>
       <div className="header__toggle-wrapper">
-        <ToggleSwitch
-          currentTemperatureUnit={currentTemperatureUnit}
-          onToggleSwitchChange={onToggleSwitchChange}
-        />
+        <ToggleSwitch />
       </div>
 
       {isLoggedIn ? (

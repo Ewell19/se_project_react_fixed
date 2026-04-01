@@ -13,6 +13,7 @@ import DeleteConfirmModal from "../DeleteConfirmModal/DeleteConfirmModal";
 import Profile from "../Profile/Profile";
 import ProtectedRoute from "../ProtectedRoute/ProtectedRoute";
 import CurrentUserContext from "../../contexts/CurrentUserContext";
+import CurrentTemperatureUnitContext from "../../contexts/CurrentTemperatureUnitContext";
 import { defaultClothingItems } from "../../utils/clothingItems";
 import api from "../../utils/api";
 import { authorize, checkToken, register } from "../../utils/auth";
@@ -33,12 +34,36 @@ function App() {
   const [itemIdToDelete, setItemIdToDelete] = useState(null);
   const [isDeleting, setIsDeleting] = useState(false);
 
+  const requireAuth = (
+    message = "Your session has expired. Please log in again.",
+  ) => {
+    localStorage.removeItem("jwt");
+    setIsLoggedIn(false);
+    setCurrentUser({});
+    setSelectedCard(null);
+    setShowDeleteConfirm(false);
+    setItemIdToDelete(null);
+    setActiveModal("login");
+    setModalError(message);
+
+    return Promise.reject(new Error(message));
+  };
+
   const getErrorMessage = (err, fallbackMessage) => {
     if (err instanceof Error && err.message) {
       return err.message;
     }
 
     return fallbackMessage;
+  };
+
+  const handleProtectedActionError = (err, fallbackMessage) => {
+    if (err?.status === 401 || err?.status === 403) {
+      return requireAuth("Your session has expired. Please log in again.");
+    }
+
+    setModalError(getErrorMessage(err, fallbackMessage));
+    return Promise.reject(err);
   };
 
   const handleAddClick = () => {
@@ -74,23 +99,31 @@ function App() {
 
   const handleAddItem = (formData) => {
     const token = localStorage.getItem("jwt");
+    setModalError("");
+
     if (!token) {
-      return;
+      return requireAuth("Please log in again to add an item.");
     }
 
-    api
+    return api
       .addItem(formData, token)
       .then((newItem) => {
         setClothingItems((prevItems) => [...prevItems, newItem]);
+        setIsUsingStarterItems(false);
         handleCloseModal();
       })
-      .catch((err) => console.log(err));
+      .catch((err) =>
+        handleProtectedActionError(
+          err,
+          "Unable to add item. Please try again.",
+        ),
+      );
   };
 
   const handleDeleteItem = (id, shouldCloseModal = true) => {
     const token = localStorage.getItem("jwt");
     if (!token) {
-      return Promise.resolve();
+      return requireAuth("Please log in again to delete items.");
     }
 
     return api
@@ -101,13 +134,16 @@ function App() {
           handleCloseModal();
         }
       })
-      .catch((err) => {
-        console.log(err);
-        throw err;
-      });
+      .catch((err) =>
+        handleProtectedActionError(
+          err,
+          "Unable to delete this item. Please try again.",
+        ),
+      );
   };
 
   const handleShowDeleteConfirm = (itemId) => {
+    setModalError("");
     setActiveModal("");
     setSelectedCard(null);
     setItemIdToDelete(itemId);
@@ -117,19 +153,21 @@ function App() {
   const handleConfirmDelete = () => {
     if (!itemIdToDelete) return;
 
+    setModalError("");
     setIsDeleting(true);
     handleDeleteItem(itemIdToDelete, false)
       .then(() => {
         setShowDeleteConfirm(false);
         setItemIdToDelete(null);
-        setIsDeleting(false);
       })
-      .catch(() => {
+      .catch(() => {})
+      .finally(() => {
         setIsDeleting(false);
       });
   };
 
   const handleCancelDelete = () => {
+    setModalError("");
     setShowDeleteConfirm(false);
     setItemIdToDelete(null);
   };
@@ -137,29 +175,26 @@ function App() {
   const handleCardLike = ({ id, isLiked }) => {
     const token = localStorage.getItem("jwt");
     if (!token) {
+      requireAuth("Please log in to like items.");
       return;
     }
 
-    if (!isLiked) {
-      api
-        .addCardLike(id, token)
-        .then((updatedCard) => {
-          setClothingItems((cards) =>
-            cards.map((item) => (item._id === id ? updatedCard : item)),
-          );
-        })
-        .catch((err) => console.log(err));
-      return;
-    }
+    const likeRequest = !isLiked
+      ? api.addCardLike(id, token)
+      : api.removeCardLike(id, token);
 
-    api
-      .removeCardLike(id, token)
+    likeRequest
       .then((updatedCard) => {
         setClothingItems((cards) =>
           cards.map((item) => (item._id === id ? updatedCard : item)),
         );
       })
-      .catch((err) => console.log(err));
+      .catch((err) =>
+        handleProtectedActionError(
+          err,
+          "Unable to update your like right now. Please try again.",
+        ),
+      );
   };
 
   const handleLogin = ({ email, password }) => {
@@ -178,6 +213,7 @@ function App() {
         setCurrentUser(userData);
         setIsLoggedIn(true);
         handleCloseModal();
+        navigate("/");
       })
       .catch((err) => {
         setModalError(
@@ -192,7 +228,7 @@ function App() {
   const handleRegister = ({ name, avatar, email, password }) => {
     setModalError("");
 
-    register({ name, avatar, email, password })
+    return register({ name, avatar, email, password })
       .then(() => authorize({ email, password }))
       .then((res) => {
         if (!res.token) {
@@ -206,6 +242,7 @@ function App() {
         setCurrentUser(userData);
         setIsLoggedIn(true);
         handleCloseModal();
+        navigate("/");
       })
       .catch((err) => {
         setModalError(
@@ -217,22 +254,23 @@ function App() {
   const handleUpdateProfile = ({ name, avatar }) => {
     const token = localStorage.getItem("jwt");
     if (!token) {
-      return;
+      return requireAuth("Please log in again to update your profile.");
     }
 
     setModalError("");
 
-    api
+    return api
       .updateUserProfile({ name, avatar }, token)
       .then((updatedUser) => {
         setCurrentUser(updatedUser);
         handleCloseModal();
       })
-      .catch((err) => {
-        setModalError(
-          getErrorMessage(err, "Unable to update profile. Please try again."),
-        );
-      });
+      .catch((err) =>
+        handleProtectedActionError(
+          err,
+          "Unable to update profile. Please try again.",
+        ),
+      );
   };
 
   const handleSignOut = () => {
@@ -290,109 +328,113 @@ function App() {
       .catch(() => {
         localStorage.removeItem("jwt");
         setIsLoggedIn(false);
+        setCurrentUser({});
       });
   }, []);
 
   return (
-    <CurrentUserContext.Provider value={currentUser}>
-      <div className="page">
-        <div className="page__content">
-          <Header
-            onAddClick={handleAddClick}
-            onLoginClick={handleLoginClick}
-            onRegisterClick={handleRegisterClick}
-            weatherData={weatherData}
-            isLoggedIn={isLoggedIn}
-            currentTemperatureUnit={currentTemperatureUnit}
-            onToggleSwitchChange={handleToggleSwitchChange}
-          />
-          <Routes>
-            <Route
-              path="/"
-              element={
-                <Main
-                  weatherData={weatherData}
-                  clothingItems={clothingItems}
-                  onCardClick={handleCardClick}
-                  onCardLike={handleCardLike}
-                  onShowDeleteConfirm={handleShowDeleteConfirm}
-                  isLoggedIn={isLoggedIn}
-                  isUsingStarterItems={isUsingStarterItems}
-                  currentTemperatureUnit={currentTemperatureUnit}
-                />
-              }
+    <CurrentTemperatureUnitContext.Provider
+      value={{ currentTemperatureUnit, handleToggleSwitchChange }}
+    >
+      <CurrentUserContext.Provider value={currentUser}>
+        <div className="page">
+          <div className="page__content">
+            <Header
+              onAddClick={handleAddClick}
+              onLoginClick={handleLoginClick}
+              onRegisterClick={handleRegisterClick}
+              weatherData={weatherData}
+              isLoggedIn={isLoggedIn}
             />
-            <Route
-              path="/profile"
-              element={
-                <ProtectedRoute isLoggedIn={isLoggedIn}>
-                  <Profile
-                    items={clothingItems}
+            <Routes>
+              <Route
+                path="/"
+                element={
+                  <Main
+                    weatherData={weatherData}
+                    clothingItems={clothingItems}
                     onCardClick={handleCardClick}
                     onCardLike={handleCardLike}
                     onShowDeleteConfirm={handleShowDeleteConfirm}
-                    onEditProfile={handleEditProfileClick}
-                    onSignOut={handleSignOut}
                     isLoggedIn={isLoggedIn}
-                    onAddClick={handleAddClick}
+                    isUsingStarterItems={isUsingStarterItems}
                   />
-                </ProtectedRoute>
-              }
-            />
-          </Routes>
-          <Footer />
+                }
+              />
+              <Route
+                path="/profile"
+                element={
+                  <ProtectedRoute isLoggedIn={isLoggedIn}>
+                    <Profile
+                      items={clothingItems}
+                      onCardClick={handleCardClick}
+                      onCardLike={handleCardLike}
+                      onShowDeleteConfirm={handleShowDeleteConfirm}
+                      onEditProfile={handleEditProfileClick}
+                      onSignOut={handleSignOut}
+                      isLoggedIn={isLoggedIn}
+                      onAddClick={handleAddClick}
+                    />
+                  </ProtectedRoute>
+                }
+              />
+            </Routes>
+            <Footer />
+          </div>
+
+          <AddItemModal
+            isOpen={activeModal === "add-garment"}
+            onClose={handleCloseModal}
+            onAddItem={handleAddItem}
+            errorMessage={modalError}
+          />
+
+          <LoginModal
+            isOpen={activeModal === "login"}
+            onClose={handleCloseModal}
+            onLogin={handleLogin}
+            onSwitchToRegister={() => {
+              setModalError("");
+              setActiveModal("register");
+            }}
+            errorMessage={modalError}
+          />
+
+          <RegisterModal
+            isOpen={activeModal === "register"}
+            onClose={handleCloseModal}
+            onRegister={handleRegister}
+            onSwitchToLogin={() => {
+              setModalError("");
+              setActiveModal("login");
+            }}
+            errorMessage={modalError}
+          />
+
+          <EditProfileModal
+            isOpen={activeModal === "edit-profile"}
+            onClose={handleCloseModal}
+            onUpdateProfile={handleUpdateProfile}
+            errorMessage={modalError}
+          />
+
+          <ItemModal
+            isOpen={activeModal === "preview"}
+            onClose={handleCloseModal}
+            card={selectedCard}
+            onShowDeleteConfirm={handleShowDeleteConfirm}
+          />
+
+          <DeleteConfirmModal
+            isOpen={showDeleteConfirm}
+            onClose={handleCancelDelete}
+            onConfirm={handleConfirmDelete}
+            isLoading={isDeleting}
+            errorMessage={modalError}
+          />
         </div>
-
-        <AddItemModal
-          isOpen={activeModal === "add-garment"}
-          onClose={handleCloseModal}
-          onAddItem={handleAddItem}
-        />
-
-        <LoginModal
-          isOpen={activeModal === "login"}
-          onClose={handleCloseModal}
-          onLogin={handleLogin}
-          onSwitchToRegister={() => {
-            setModalError("");
-            setActiveModal("register");
-          }}
-          errorMessage={modalError}
-        />
-
-        <RegisterModal
-          isOpen={activeModal === "register"}
-          onClose={handleCloseModal}
-          onRegister={handleRegister}
-          onSwitchToLogin={() => {
-            setModalError("");
-            setActiveModal("login");
-          }}
-          errorMessage={modalError}
-        />
-
-        <EditProfileModal
-          isOpen={activeModal === "edit-profile"}
-          onClose={handleCloseModal}
-          onUpdateProfile={handleUpdateProfile}
-          errorMessage={modalError}
-        />
-
-        <ItemModal
-          isOpen={activeModal === "preview"}
-          onClose={handleCloseModal}
-          card={selectedCard}
-          onShowDeleteConfirm={handleShowDeleteConfirm}
-        />
-
-        <DeleteConfirmModal
-          isOpen={showDeleteConfirm}
-          onClose={handleCancelDelete}
-          onConfirm={handleConfirmDelete}
-          isLoading={isDeleting}
-        />
-      </div>
-    </CurrentUserContext.Provider>
+      </CurrentUserContext.Provider>
+    </CurrentTemperatureUnitContext.Provider>
   );
 }
 

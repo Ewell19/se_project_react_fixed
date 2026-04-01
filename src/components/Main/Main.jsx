@@ -1,5 +1,7 @@
+import { useContext } from "react";
 import WeatherCard from "../WeatherCard/WeatherCard";
 import ItemCard from "../ItemCard/ItemCard";
+import CurrentTemperatureUnitContext from "../../contexts/CurrentTemperatureUnitContext";
 import "./Main.css";
 
 function Main({
@@ -10,8 +12,8 @@ function Main({
   onShowDeleteConfirm,
   isLoggedIn,
   isUsingStarterItems,
-  currentTemperatureUnit,
 }) {
+  const { currentTemperatureUnit } = useContext(CurrentTemperatureUnitContext);
   const weatherType = weatherData?.weather || "cold";
 
   const getTempFallbackType = () => {
@@ -55,10 +57,7 @@ function Main({
 
   return (
     <main className="main">
-      <WeatherCard
-        weatherData={weatherData}
-        currentTemperatureUnit={currentTemperatureUnit}
-      />
+      <WeatherCard weatherData={weatherData} />
       <section className="cards">
         <p className="cards__text">
           Today is {displayedTemperature}°{currentTemperatureUnit} / You may

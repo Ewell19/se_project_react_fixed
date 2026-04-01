@@ -1,6 +1,9 @@
+import { useContext } from "react";
+import CurrentTemperatureUnitContext from "../../contexts/CurrentTemperatureUnitContext";
 import "./WeatherCard.css";
 
-function WeatherCard({ weatherData, currentTemperatureUnit }) {
+function WeatherCard({ weatherData }) {
+  const { currentTemperatureUnit } = useContext(CurrentTemperatureUnitContext);
   const temperatureInFahrenheit = weatherData?.temperature;
   const displayedTemperature =
     typeof temperatureInFahrenheit === "number"

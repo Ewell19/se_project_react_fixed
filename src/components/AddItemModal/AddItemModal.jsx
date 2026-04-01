@@ -3,7 +3,7 @@ import ModalWithForm from "../ModalWithForm/ModalWithForm";
 
 const weatherOptions = ["hot", "warm", "cold"];
 
-function AddItemModal({ isOpen, onClose, onAddItem }) {
+function AddItemModal({ isOpen, onClose, onAddItem, errorMessage }) {
   const [itemName, setItemName] = useState("");
   const [imageUrl, setImageUrl] = useState("");
   const [weather, setWeather] = useState("hot");
@@ -26,6 +26,7 @@ function AddItemModal({ isOpen, onClose, onAddItem }) {
       isOpen={isOpen}
       onClose={onClose}
       onSubmit={handleSubmit}
+      errorMessage={errorMessage}
     >
       <label htmlFor="item-name" className="modal__label">
         Item name

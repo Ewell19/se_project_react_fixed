@@ -4,10 +4,16 @@ const checkResponse = (res) => {
   if (!res.ok) {
     return res
       .json()
-      .catch(() => Promise.reject(new Error(`HTTP ${res.status}`)))
+      .catch(() => {
+        const error = new Error(`HTTP ${res.status}`);
+        error.status = res.status;
+        return Promise.reject(error);
+      })
       .then((data) => {
         const message = data?.message || `HTTP ${res.status}`;
-        return Promise.reject(new Error(message));
+        const error = new Error(message);
+        error.status = res.status;
+        return Promise.reject(error);
       });
   }
 
