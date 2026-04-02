@@ -1,23 +1,31 @@
-import { useContext, useEffect, useState } from "react";
+import { useContext, useEffect } from "react";
 import ModalWithForm from "../ModalWithForm/ModalWithForm";
 import CurrentUserContext from "../../contexts/CurrentUserContext";
 import { defaultAvatarUrl, presetAvatarUrls } from "../../utils/constants";
+import useForm from "../../hooks/useForm";
 
 function EditProfileModal({ isOpen, onClose, onUpdateProfile, errorMessage }) {
   const currentUser = useContext(CurrentUserContext);
-  const [name, setName] = useState("");
-  const [avatar, setAvatar] = useState("");
+  const { values, handleChange, resetForm, setValue } = useForm({
+    name: "",
+    avatar: "",
+  });
 
   useEffect(() => {
     if (isOpen) {
-      setName(currentUser?.name || "");
-      setAvatar(currentUser?.avatar || defaultAvatarUrl);
+      resetForm({
+        name: currentUser?.name || "",
+        avatar: currentUser?.avatar || defaultAvatarUrl,
+      });
     }
-  }, [currentUser, isOpen]);
+  }, [currentUser, isOpen, resetForm]);
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    onUpdateProfile({ name, avatar: avatar.trim() || defaultAvatarUrl });
+    onUpdateProfile({
+      name: values.name,
+      avatar: values.avatar.trim() || defaultAvatarUrl,
+    });
   };
 
   return (
@@ -35,9 +43,10 @@ function EditProfileModal({ isOpen, onClose, onUpdateProfile, errorMessage }) {
         <input
           id="edit-name"
           type="text"
+          name="name"
           className="modal__input"
-          value={name}
-          onChange={(e) => setName(e.target.value)}
+          value={values.name}
+          onChange={handleChange}
           minLength="2"
           maxLength="30"
           required
@@ -49,16 +58,17 @@ function EditProfileModal({ isOpen, onClose, onUpdateProfile, errorMessage }) {
         <input
           id="edit-avatar"
           type="url"
+          name="avatar"
           className="modal__input"
-          value={avatar}
-          onChange={(e) => setAvatar(e.target.value)}
+          value={values.avatar}
+          onChange={handleChange}
         />
       </label>
 
       <button
         type="button"
         className="modal__avatar-default-btn"
-        onClick={() => setAvatar(defaultAvatarUrl)}
+        onClick={() => setValue("avatar", defaultAvatarUrl)}
       >
         Use default weather avatar
       </button>
@@ -71,9 +81,9 @@ function EditProfileModal({ isOpen, onClose, onUpdateProfile, errorMessage }) {
               key={url}
               type="button"
               className={`modal__avatar-option ${
-                avatar === url ? "modal__avatar-option_selected" : ""
+                values.avatar === url ? "modal__avatar-option_selected" : ""
               }`}
-              onClick={() => setAvatar(url)}
+              onClick={() => setValue("avatar", url)}
               aria-label="Choose avatar"
             >
               <img
@@ -86,11 +96,11 @@ function EditProfileModal({ isOpen, onClose, onUpdateProfile, errorMessage }) {
         </div>
       </fieldset>
 
-      {avatar && (
+      {values.avatar && (
         <div className="modal__avatar-preview">
           <span className="modal__avatar-preview-label">Preview</span>
           <img
-            src={avatar}
+            src={values.avatar}
             alt="Selected avatar"
             className="modal__avatar-preview-image"
           />

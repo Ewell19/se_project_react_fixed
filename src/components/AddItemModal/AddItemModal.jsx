@@ -1,20 +1,28 @@
-import { useState } from "react";
+import { useEffect } from "react";
 import ModalWithForm from "../ModalWithForm/ModalWithForm";
+import useForm from "../../hooks/useForm";
 
 const weatherOptions = ["hot", "warm", "cold"];
 
 function AddItemModal({ isOpen, onClose, onAddItem, errorMessage }) {
-  const [itemName, setItemName] = useState("");
-  const [imageUrl, setImageUrl] = useState("");
-  const [weather, setWeather] = useState("hot");
+  const { values, handleChange, resetForm } = useForm({
+    name: "",
+    imageUrl: "",
+    weather: "hot",
+  });
+
+  useEffect(() => {
+    if (isOpen) {
+      resetForm();
+    }
+  }, [isOpen, resetForm]);
 
   const handleSubmit = (e) => {
     e.preventDefault();
-
     onAddItem({
-      name: itemName,
-      link: imageUrl.trim(),
-      weather,
+      name: values.name,
+      link: values.imageUrl.trim(),
+      weather: values.weather,
     });
   };
 
@@ -33,10 +41,11 @@ function AddItemModal({ isOpen, onClose, onAddItem, errorMessage }) {
         <input
           id="item-name"
           type="text"
+          name="name"
           className="modal__input"
           placeholder="Name"
-          value={itemName}
-          onChange={(e) => setItemName(e.target.value)}
+          value={values.name}
+          onChange={handleChange}
           minLength="1"
           maxLength="30"
           required
@@ -48,10 +57,11 @@ function AddItemModal({ isOpen, onClose, onAddItem, errorMessage }) {
         <input
           id="image-url"
           type="url"
+          name="imageUrl"
           className="modal__input"
           placeholder="https://..."
-          value={imageUrl}
-          onChange={(e) => setImageUrl(e.target.value)}
+          value={values.imageUrl}
+          onChange={handleChange}
           required
         />
       </label>
@@ -64,8 +74,8 @@ function AddItemModal({ isOpen, onClose, onAddItem, errorMessage }) {
               type="radio"
               name="weather"
               value={option}
-              checked={weather === option}
-              onChange={(e) => setWeather(e.target.value)}
+              checked={values.weather === option}
+              onChange={handleChange}
               className="modal__radio-input"
             />
             {option.charAt(0).toUpperCase() + option.slice(1)}

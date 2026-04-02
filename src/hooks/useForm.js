@@ -1,6 +1,7 @@
-import { useState, useCallback } from "react";
+import { useState, useCallback, useRef } from "react";
 
 const useForm = (initialValues = {}) => {
+  const initialValuesRef = useRef(initialValues);
   const [values, setValues] = useState(initialValues);
 
   const handleChange = useCallback((e) => {
@@ -11,14 +12,15 @@ const useForm = (initialValues = {}) => {
     }));
   }, []);
 
-  const resetForm = useCallback(
-    (newValues = initialValues) => {
-      setValues(newValues);
-    },
-    [initialValues]
-  );
+  const resetForm = useCallback((newValues) => {
+    setValues(newValues !== undefined ? newValues : initialValuesRef.current);
+  }, []);
 
-  return { values, handleChange, resetForm };
+  const setValue = useCallback((name, value) => {
+    setValues((prev) => ({ ...prev, [name]: value }));
+  }, []);
+
+  return { values, handleChange, resetForm, setValue };
 };
 
 export default useForm;

@@ -1,6 +1,7 @@
-import { useState } from "react";
+import { useEffect } from "react";
 import ModalWithForm from "../ModalWithForm/ModalWithForm";
 import { defaultAvatarUrl, presetAvatarUrls } from "../../utils/constants";
+import useForm from "../../hooks/useForm";
 
 function RegisterModal({
   isOpen,
@@ -9,20 +10,31 @@ function RegisterModal({
   onSwitchToLogin,
   errorMessage,
 }) {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [name, setName] = useState("");
-  const [avatar, setAvatar] = useState(defaultAvatarUrl);
+  const { values, handleChange, resetForm, setValue } = useForm({
+    email: "",
+    password: "",
+    name: "",
+    avatar: defaultAvatarUrl,
+  });
   const isSubmitDisabled =
-    !email.trim() || !password.trim() || !name.trim() || password.length < 6;
+    !values.email.trim() ||
+    !values.password.trim() ||
+    !values.name.trim() ||
+    values.password.length < 6;
+
+  useEffect(() => {
+    if (isOpen) {
+      resetForm();
+    }
+  }, [isOpen, resetForm]);
 
   const handleSubmit = (e) => {
     e.preventDefault();
     onRegister({
-      name,
-      avatar: avatar.trim() || defaultAvatarUrl,
-      email,
-      password,
+      name: values.name,
+      avatar: values.avatar.trim() || defaultAvatarUrl,
+      email: values.email,
+      password: values.password,
     });
   };
 
@@ -44,10 +56,11 @@ function RegisterModal({
         <input
           id="register-email"
           type="email"
+          name="email"
           className="modal__input"
           placeholder="Email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
+          value={values.email}
+          onChange={handleChange}
           required
         />
       </label>
@@ -57,10 +70,11 @@ function RegisterModal({
         <input
           id="register-password"
           type="password"
+          name="password"
           className="modal__input"
           placeholder="Password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
+          value={values.password}
+          onChange={handleChange}
           minLength="6"
           required
         />
@@ -71,10 +85,11 @@ function RegisterModal({
         <input
           id="register-name"
           type="text"
+          name="name"
           className="modal__input"
           placeholder="Name"
-          value={name}
-          onChange={(e) => setName(e.target.value)}
+          value={values.name}
+          onChange={handleChange}
           minLength="2"
           maxLength="30"
           required
@@ -86,17 +101,18 @@ function RegisterModal({
         <input
           id="register-avatar"
           type="url"
+          name="avatar"
           className="modal__input"
           placeholder="https://..."
-          value={avatar}
-          onChange={(e) => setAvatar(e.target.value)}
+          value={values.avatar}
+          onChange={handleChange}
         />
       </label>
 
       <button
         type="button"
         className="modal__avatar-default-btn"
-        onClick={() => setAvatar(defaultAvatarUrl)}
+        onClick={() => setValue("avatar", defaultAvatarUrl)}
       >
         Use default weather avatar
       </button>
@@ -109,9 +125,9 @@ function RegisterModal({
               key={url}
               type="button"
               className={`modal__avatar-option ${
-                avatar === url ? "modal__avatar-option_selected" : ""
+                values.avatar === url ? "modal__avatar-option_selected" : ""
               }`}
-              onClick={() => setAvatar(url)}
+              onClick={() => setValue("avatar", url)}
               aria-label="Choose avatar"
             >
               <img
@@ -124,11 +140,11 @@ function RegisterModal({
         </div>
       </fieldset>
 
-      {avatar && (
+      {values.avatar && (
         <div className="modal__avatar-preview">
           <span className="modal__avatar-preview-label">Preview</span>
           <img
-            src={avatar}
+            src={values.avatar}
             alt="Selected avatar"
             className="modal__avatar-preview-image"
           />
