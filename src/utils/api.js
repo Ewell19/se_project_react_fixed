@@ -1,4 +1,7 @@
-const BASE_URL = "http://127.0.0.1:3001";
+const BASE_URL =
+  process.env.NODE_ENV === "production"
+    ? "https://api.wtwr.barabesta.is"
+    : "http://localhost:3001";
 
 const checkResponse = (res) => {
   if (!res.ok) {
@@ -25,77 +28,82 @@ class Api {
     this._baseUrl = baseUrl;
   }
 
-  _request(url, options) {
-    return fetch(`${this._baseUrl}${url}`, options).then(checkResponse);
+  _request(url, options = {}) {
+    return fetch(`${this._baseUrl}${url}`, options)
+      .then(checkResponse)
+      .catch((err) => {
+        console.error(`API Error: ${err.message}`, err);
+        throw err;
+      });
   }
 
-  _normalizeItem(item) {
-    return {
-      ...item,
-      link: item.link || item.imageUrl,
-      likes: item.likes || [],
-    };
-  }
-
-  getItems() {
-    return this._request("/items", {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-      },
-    }).then((items) => items.map((item) => this._normalizeItem(item)));
-  }
-
-  addItem({ name, link, weather }, token) {
-    return this._request("/items", {
+  signup({ name, avatar, email, password }) {
+    return this._request("/signup", {
       method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        authorization: `Bearer ${token}`,
-      },
-      body: JSON.stringify({ name, imageUrl: link, weather }),
-    }).then((item) => this._normalizeItem(item));
-  }
-
-  deleteItem(id, token) {
-    return this._request(`/items/${id}`, {
-      method: "DELETE",
-      headers: {
-        "Content-Type": "application/json",
-        authorization: `Bearer ${token}`,
-      },
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ name, avatar, email, password }),
     });
   }
 
-  updateUserProfile({ name, avatar }, token) {
+  signin({ email, password }) {
+    return this._request("/signin", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ email, password }),
+    });
+  }
+
+  getUser(token) {
+    return this._request("/users/me", {
+      headers: { Authorization: `Bearer ${token}` },
+    });
+  }
+
+  updateUser(token, { name, avatar }) {
     return this._request("/users/me", {
       method: "PATCH",
       headers: {
+        Authorization: `Bearer ${token}`,
         "Content-Type": "application/json",
-        authorization: `Bearer ${token}`,
       },
       body: JSON.stringify({ name, avatar }),
     });
   }
 
-  addCardLike(id, token) {
-    return this._request(`/items/${id}/likes`, {
-      method: "PUT",
-      headers: {
-        "Content-Type": "application/json",
-        authorization: `Bearer ${token}`,
-      },
-    }).then((item) => this._normalizeItem(item));
+  getItems() {
+    return this._request("/items");
   }
 
-  removeCardLike(id, token) {
-    return this._request(`/items/${id}/likes`, {
-      method: "DELETE",
+  createItem(token, { name, weather, imageUrl }) {
+    return this._request("/items", {
+      method: "POST",
       headers: {
+        Authorization: `Bearer ${token}`,
         "Content-Type": "application/json",
-        authorization: `Bearer ${token}`,
       },
-    }).then((item) => this._normalizeItem(item));
+      body: JSON.stringify({ name, weather, imageUrl }),
+    });
+  }
+
+  deleteItem(token, itemId) {
+    return this._request(`/items/${itemId}`, {
+      method: "DELETE",
+      headers: { Authorization: `Bearer ${token}` },
+    });
+  }
+
+  likeItem(token, itemId) {
+    return this._request(`/items/${itemId}/likes`, {
+      method: "PUT",
+      headers: { Authorization: `Bearer ${token}` },
+    });
+  }
+
+  unlikeItem(token, itemId) {
+    return this._request(`/items/${itemId}/likes`, {
+      method: "DELETE",
+      headers: { Authorization: `Bearer ${token}` },
+    });
   }
 }
 
