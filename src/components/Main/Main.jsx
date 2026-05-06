@@ -38,15 +38,20 @@ function Main({
     (item) => item.weather.toLowerCase() === weatherType.toLowerCase(),
   );
 
+  const fallbackCards = clothingItems.filter(
+    (item) => item.weather.toLowerCase() === getTempFallbackType().toLowerCase(),
+  );
+
   const filteredCards =
     cardsForCurrentWeather.length > 0
       ? cardsForCurrentWeather
-      : clothingItems.filter(
-          (item) =>
-            item.weather.toLowerCase() === getTempFallbackType().toLowerCase(),
-        );
+      : fallbackCards.length > 0
+        ? fallbackCards
+        : clothingItems;
 
   const isUsingWeatherFallback = cardsForCurrentWeather.length === 0;
+  const isUsingAllItemsFallback =
+    cardsForCurrentWeather.length === 0 && fallbackCards.length === 0;
   const temperatureInFahrenheit = weatherData?.temperature;
   const displayedTemperature =
     typeof temperatureInFahrenheit === "number"
@@ -72,6 +77,11 @@ function Main({
           <p className="cards__note">
             No exact matches for this weather type yet. Showing
             temperature-based options.
+          </p>
+        )}
+        {isUsingAllItemsFallback && (
+          <p className="cards__note">
+            No weather-specific matches found. Showing all available clothes.
           </p>
         )}
         <ul className="cards__list">
