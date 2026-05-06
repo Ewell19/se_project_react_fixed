@@ -14,7 +14,39 @@ function Main({
   isUsingStarterItems,
 }) {
   const { currentTemperatureUnit } = useContext(CurrentTemperatureUnitContext);
-  const filteredCards = clothingItems;
+  const weatherType = weatherData?.weather || "cold";
+
+  const getTempFallbackType = () => {
+    const temp = weatherData?.temperature;
+
+    if (typeof temp !== "number") {
+      return "cold";
+    }
+
+    if (temp >= 86) {
+      return "hot";
+    }
+
+    if (temp >= 66) {
+      return "warm";
+    }
+
+    return "cold";
+  };
+
+  const cardsForCurrentWeather = clothingItems.filter(
+    (item) => item.weather.toLowerCase() === weatherType.toLowerCase(),
+  );
+
+  const filteredCards =
+    cardsForCurrentWeather.length > 0
+      ? cardsForCurrentWeather
+      : clothingItems.filter(
+          (item) =>
+            item.weather.toLowerCase() === getTempFallbackType().toLowerCase(),
+        );
+
+  const isUsingWeatherFallback = cardsForCurrentWeather.length === 0;
   const temperatureInFahrenheit = weatherData?.temperature;
   const displayedTemperature =
     typeof temperatureInFahrenheit === "number"
@@ -34,6 +66,12 @@ function Main({
         {isUsingStarterItems && (
           <p className="cards__note">
             No items were loaded from the database yet. Showing starter clothes.
+          </p>
+        )}
+        {isUsingWeatherFallback && (
+          <p className="cards__note">
+            No exact matches for this weather type yet. Showing
+            temperature-based options.
           </p>
         )}
         <ul className="cards__list">
