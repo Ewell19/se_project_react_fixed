@@ -1,5 +1,5 @@
 const BASE_URL =
-  process.env.NODE_ENV === "production"
+  import.meta.env.PROD
     ? "https://api.wtwr.barabesta.is"
     : "http://localhost:3001";
 
