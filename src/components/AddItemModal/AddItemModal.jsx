@@ -21,7 +21,7 @@ function AddItemModal({ isOpen, onClose, onAddItem, errorMessage }) {
     e.preventDefault();
     onAddItem({
       name: values.name,
-      link: values.imageUrl.trim(),
+      imageUrl: values.imageUrl.trim(),
       weather: values.weather,
     });
   };

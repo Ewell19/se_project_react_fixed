@@ -32,6 +32,7 @@ function ClothesSection({
             onCardLike={onCardLike}
             onShowDeleteConfirm={onShowDeleteConfirm}
             isLoggedIn={isLoggedIn}
+            showLikeButton={false}
           />
         ))}
       </ul>

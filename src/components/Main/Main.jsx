@@ -9,7 +9,6 @@ function Main({
   clothingItems,
   onCardClick,
   onCardLike,
-  onShowDeleteConfirm,
   isLoggedIn,
   isUsingStarterItems,
 }) {
@@ -81,7 +80,6 @@ function Main({
               item={item}
               onCardClick={onCardClick}
               onCardLike={onCardLike}
-              onShowDeleteConfirm={onShowDeleteConfirm}
               isLoggedIn={isLoggedIn}
             />
           ))}

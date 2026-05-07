@@ -8,6 +8,7 @@ function ItemCard({
   onCardLike,
   onShowDeleteConfirm,
   isLoggedIn,
+  showLikeButton = true,
 }) {
   const currentUser = useContext(CurrentUserContext);
   const [imageError, setImageError] = useState(false);
@@ -69,7 +70,7 @@ function ItemCard({
               aria-label="delete"
             />
           )}
-          {isLoggedIn && (
+          {isLoggedIn && showLikeButton && (
             <button
               type="button"
               className={itemLikeButtonClassName}
