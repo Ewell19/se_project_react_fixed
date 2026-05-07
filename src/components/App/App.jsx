@@ -34,6 +34,11 @@ function App() {
   const [itemIdToDelete, setItemIdToDelete] = useState(null);
   const [isDeleting, setIsDeleting] = useState(false);
 
+  const profileItems = clothingItems.filter((item) => {
+    const owner = typeof item.owner === "object" ? item.owner?._id : item.owner;
+    return owner === currentUser._id;
+  });
+
   const requireAuth = (
     message = "Your session has expired. Please log in again.",
   ) => {
@@ -106,7 +111,7 @@ function App() {
     }
 
     return api
-      .addItem(formData, token)
+      .createItem(token, formData)
       .then((newItem) => {
         setClothingItems((prevItems) => [...prevItems, newItem]);
         setIsUsingStarterItems(false);
@@ -127,7 +132,7 @@ function App() {
     }
 
     return api
-      .deleteItem(id, token)
+      .deleteItem(token, id)
       .then(() => {
         setClothingItems((items) => items.filter((item) => item._id !== id));
         if (shouldCloseModal) {
@@ -180,8 +185,8 @@ function App() {
     }
 
     const likeRequest = !isLiked
-      ? api.addCardLike(id, token)
-      : api.removeCardLike(id, token);
+      ? api.likeItem(token, id)
+      : api.unlikeItem(token, id);
 
     likeRequest
       .then((updatedCard) => {
@@ -260,7 +265,7 @@ function App() {
     setModalError("");
 
     return api
-      .updateUserProfile({ name, avatar }, token)
+      .updateUser(token, { name, avatar })
       .then((updatedUser) => {
         setCurrentUser(updatedUser);
         handleCloseModal();
@@ -366,7 +371,7 @@ function App() {
                 element={
                   <ProtectedRoute isLoggedIn={isLoggedIn}>
                     <Profile
-                      items={clothingItems}
+                      items={profileItems}
                       onCardClick={handleCardClick}
                       onCardLike={handleCardLike}
                       onShowDeleteConfirm={handleShowDeleteConfirm}
